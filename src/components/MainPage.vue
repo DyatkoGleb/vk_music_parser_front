@@ -1,18 +1,7 @@
 <template>
+	<MainMenu/>
 	<div class="wrapper">
-		<div class="calendar">
-			<div class="d-flex">
-				<div class="current-month-wrapper me-auto">
-					<i class="bi bi-arrow-left"></i>
-					<a class="current-month mx-1" id="current-month"></a>
-					<i class="bi bi-arrow-right"></i>
-				</div>
-
-				<a class="about pe-2">Зачем?</a>
-				<a class="my-music">Моя музыка</a>
-			</div>
-
-			<div class="calendar-carousel py-3 d-flex" id="calendar-carousel"></div>
+			<div class="calendar-carousel pb-4 d-flex" id="calendar-carousel"></div>
 
 			<div class="row">
 				<div class="col-8">
@@ -38,8 +27,6 @@
 				</div>
 			</div>
 
-		</div>
-
 
 
 
@@ -47,26 +34,19 @@
 		<p>сначала за сегодняшний день, сколько песен из дневного плейлиста есть в моей музыке, сколько песен из него же есть в предыдущих плейлистах</p>
 		<p>где-то нужно вывести график как с течением времени уменьшается количество уникальных песен в ежедневниках</p>
 
-		<a>
-			Расширение для браузера <i class="bi-github" role="img" aria-label="GitHub"></i>
-		</a>
-		<a>
-			Api <i class="bi-github" role="img" aria-label="GitHub"></i>
-		</a>
-		<a>
-			Front <i class="bi-github" role="img" aria-label="GitHub"></i>
-		</a>
 	</div>
 </template>
 
 
 <script>
+import MainMenu from './MainMenu.vue'
 import SongRow from './SongRow.vue'
 
 export default {
 	name: 'MainPage',
 	components: {
-		SongRow
+		MainMenu,
+		SongRow,
 	},
 	data() {
 		return {
