@@ -16,8 +16,11 @@
 
 			<div class="row">
 				<div class="col-8">
-					<div class="block daily-playlist my-3" id="daily-playlist">
-						<p>Плейлист второго июля</p> 
+					<div class="block daily-playlist" id="daily-playlist">
+						<div class="daily-playlist-header p-2" id="daily-playlist-header"></div>
+						<div v-for="(name, artist, idx) of currentPlaylist" v-bind:key="idx">
+							<SongRow v-bind:artist="artist" v-bind:name="name"/>
+						</div>
 					</div>
 				</div>
 				<div class="col-4">
@@ -58,15 +61,18 @@
 
 
 <script>
+import SongRow from './SongRow.vue'
+
 export default {
 	name: 'MainPage',
-	props: {
-		msg: String
+	components: {
+		SongRow
 	},
 	data() {
 		return {
 			monthList: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-			getLastDailyPlaylist: 'http://localhost:1111/lastGetedPlaylist'
+			getLastDailyPlaylist: 'http://localhost:1111/lastGetedPlaylist',
+			currentPlaylist: {}
 		}
 	},
 	async mounted() {
@@ -89,9 +95,9 @@ export default {
 			a.innerText = playlistDate.getDate()
 			document.getElementById('calendar-carousel').append(a)
 			
-			for (let song in data.playlist) {
-				document.getElementById('daily-playlist').append(this.addSong(song, data.playlist[song]))
-			}
+			this.currentPlaylist = data.playlist
+
+			this.setDateActivePlaylist(playlistDate.getDate(), playlistDate.getMonth()+1, playlistDate.getFullYear())
 		} else {
 			alert("Ошибка HTTP: " + response.status)
 		}
@@ -103,8 +109,8 @@ export default {
 		setCurrentMonth(month) {
 			document.getElementById('current-month').innerText = this.monthList[month]
 		},
-		displayCurrentPlaylist() {
-
+		setDateActivePlaylist(day, month, year) {
+			document.getElementById('daily-playlist-header').innerText = `Плейлист от ${day}.${month}.${year}`
 		},
 		addSong(artist, name) {
 			let songBlock = document.createElement('div')
@@ -168,25 +174,35 @@ a:hover {
 	background: #0077ff;
 }
 .block {
+	position: relative;
 	width: 100%; 
 	border-radius: 12px;
 	background: white;
 }
 .daily-playlist {
+	overflow: hidden;
 	overflow-y: auto;
 	height: 400px;
 }
 .daily-playlist::-webkit-scrollbar {
-	width: 5px;
+	width: 0px;
 }
-.daily-playlist::-webkit-scrollbar-thumb {
-	border-radius: 3px;
+.daily-playlist-header {
+	margin-left: auto;
+	margin-right: 0;
+	border-radius: 12px;
 	background-color: #0077ff;
+	color: white;
 }
 .about-daily-playlist {
 	height: 400px;
+	cursor: pointer;
+}
+.about-daily-playlist:hover {
+	box-shadow: 0 0 10px 10px #00000005;
 }
 .uniqueness-percent {
-	background: #ffb366;
+	background: #0077ff;
+	color: white;
 }
 </style>
