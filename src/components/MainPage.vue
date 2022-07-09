@@ -1,33 +1,31 @@
 <template>
 	<MainMenu/>
 	<div class="wrapper">
-			<div class="calendar-carousel pb-4 d-flex" id="calendar-carousel"></div>
+		<div class="calendar-carousel pb-4 d-flex" id="calendar-carousel"></div>
 
-			<div class="row">
-				<div class="col-8">
-					<div class="block daily-playlist" id="daily-playlist">
-						<div class="daily-playlist-header p-2" id="daily-playlist-header"></div>
-						<div v-for="(name, artist, idx) of currentPlaylist" v-bind:key="idx">
-							<SongRow v-bind:artist="artist" v-bind:name="name"/>
-						</div>
-					</div>
-				</div>
-				<div class="col-4">
-					<div class="block about-daily-playlist my-3">
-						<div class="block uniqueness-percent p-3">
-							<p>на сколько уникален</p> 
-							<p>подробней</p>
-						</div>
-						<div class="more-details">
-							<p>3 песни совпадают с моими аудио</p>
-							<p>17 песен встречались ранее</p>
-							<p>если кликнуть щирина колонки станет 8 и появится график</p>
-						</div>
+		<div class="row">
+			<div class="col-8">
+				<div class="block daily-playlist" id="daily-playlist">
+					<div class="daily-playlist-header p-2" id="daily-playlist-header"></div>
+					<div v-for="(name, artist, idx) of currentPlaylist" v-bind:key="idx">
+						<SongRow v-bind:artist="artist" v-bind:name="name"/>
 					</div>
 				</div>
 			</div>
-
-
+			<div class="col-4">
+				<div class="block about-daily-playlist my-3">
+					<div class="block uniqueness-percent p-3">
+						<p>на сколько уникален</p> 
+						<p>подробней</p>
+					</div>
+					<div class="more-details">
+						<p>3 песни совпадают с моими аудио</p>
+						<p>17 песен встречались ранее</p>
+						<p>если кликнуть щирина колонки станет 8 и появится график</p>
+					</div>
+				</div>
+			</div>
+		</div>
 
 
 		<p>инфографика</p>
@@ -35,17 +33,20 @@
 		<p>где-то нужно вывести график как с течением времени уменьшается количество уникальных песен в ежедневниках</p>
 
 	</div>
+	<AboutNote/>
 </template>
 
 
 <script>
 import MainMenu from './MainMenu.vue'
+import AboutNote from './AboutNote.vue'
 import SongRow from './SongRow.vue'
 
 export default {
 	name: 'MainPage',
 	components: {
 		MainMenu,
+		AboutNote,
 		SongRow,
 	},
 	data() {
