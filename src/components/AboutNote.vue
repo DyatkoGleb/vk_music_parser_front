@@ -1,7 +1,7 @@
 <template>
     <div class="about-note-overlay d-none" @click="hideAboutNote">
         <div class="about-note" id="about-note">
-            <div class="btn-close" @click="closeAboutNote"></div>
+            <div class="btn-close" @click="showHideAboutNote"></div>
             <p>
                 Я дикий меломан: жить без музыки не могу, и подборки типа "Твоё рок-утро", "Музыка для тренировок", "Поезка" не всегда могут удовлетворить мою потребность в звучании. 
                 <br>
@@ -47,26 +47,16 @@
 export default {
 	name: 'AboutNote',
     mounted() {
-        this.emitter.on('displayAboutNote', () => this.displayAboutNote())
+        this.emitter.on('displayAboutNote', () => this.showHideAboutNote())
     },
     methods: {
-        displayAboutNote() {
-            const aboutNoteBlock = document.querySelector('.about-note-overlay')
-            
-            aboutNoteBlock.classList.toggle('d-none')
-        },
         hideAboutNote(e) {
-            const aboutNoteBlock = document.querySelector('.about-note-overlay')
-            const target = e.path[0]
-            
-            if (target.classList.contains('about-note-overlay')) {
-                aboutNoteBlock.classList.add('d-none')
+            if (e.path[0].classList.contains('about-note-overlay')) {
+                this.showHideAboutNote()
             }
         },
-        closeAboutNote() {
-            const aboutNoteBlock = document.querySelector('.about-note-overlay')
-
-            aboutNoteBlock.classList.add('d-none')
+        showHideAboutNote() {
+            document.querySelector('.about-note-overlay').classList.toggle('d-none')
         }
     }
 }
