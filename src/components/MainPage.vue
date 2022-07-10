@@ -1,7 +1,7 @@
 <template>
 	<MainMenu/>
 	<div class="wrapper">
-		<div class="calendar-carousel pb-4 d-flex" id="calendar-carousel"></div>
+		<CalendarCarousel :playlistsProps="playlists"/>
 
 		<div class="row">
 			<div class="col-8">
@@ -38,6 +38,7 @@
 
 
 <script>
+import CalendarCarousel from './CalendarCarousel.vue'
 import MainMenu from './MainMenu.vue'
 import AboutNote from './AboutNote.vue'
 import SongRow from './SongRow.vue'
@@ -45,6 +46,7 @@ import SongRow from './SongRow.vue'
 export default {
 	name: 'MainPage',
 	components: {
+		CalendarCarousel,
 		MainMenu,
 		AboutNote,
 		SongRow,
@@ -52,40 +54,53 @@ export default {
 	data() {
 		return {
 			monthList: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-			getLastDailyPlaylist: 'http://localhost:1111/lastGetedPlaylist',
-			currentPlaylist: {}
+			urlGetLastDailyPlaylist: 'http://localhost:1111/lastGetedPlaylist',
+			urlGetAllDateExistsPlaylists: 'http://localhost:1111/allDateExistsPlaylists',
+			playlists: {},
+			currentPlaylist: {},
 		}
 	},
-	async mounted() {
-		const response = await fetch(this.getLastDailyPlaylist, {
-			method: 'POST',
-			headers: { 
-				'Content-Type': 'application/json;charset=utf-8' 
-			}
-		})
-		
-
-		if (response.ok) {
-			let data = (await response.json()).data
-			let playlistDate = new Date(data['date'])
-
-			this.setCurrentMonth(playlistDate.getMonth())
-
-			let a = document.createElement('a')
-			a.classList.add('calendar-day')
-			a.innerText = playlistDate.getDate()
-			document.getElementById('calendar-carousel').append(a)
-			
-			this.currentPlaylist = data.playlist
-
-			this.setDateActivePlaylist(playlistDate.getDate(), playlistDate.getMonth()+1, playlistDate.getFullYear())
-		} else {
-			alert("Ошибка HTTP: " + response.status)
-		}
+	mounted() {
+		this.getLastAddedPlaylist()
+		this.getAllDateExistsPlaylists()
 	},
 	methods: {
-		displayCalendar() {
+		async getLastAddedPlaylist() {
+			const response = await fetch(this.urlGetLastDailyPlaylist, {
+				method: 'GET',
+				headers: { 
+					'Content-Type': 'application/json;charset=utf-8' 
+				}
+			})
+			
 
+			if (response.ok) {
+				let data = (await response.json()).data
+				let playlistDate = new Date(data['date'])
+
+				this.setCurrentMonth(playlistDate.getMonth())
+				
+				this.currentPlaylist = data.playlist
+
+				this.setDateActivePlaylist(playlistDate.getDate(), playlistDate.getMonth()+1, playlistDate.getFullYear())
+			} else {
+				alert("Ошибка HTTP: " + response.status)
+			}
+		},
+		async getAllDateExistsPlaylists() {
+			const response = await fetch(this.urlGetAllDateExistsPlaylists, {
+				method: 'GET',
+				headers: { 
+					'Content-Type': 'application/json;charset=utf-8' 
+				}
+			})
+			
+			if (response.ok) {
+				let playlists = (await response.json()).data
+				this.playlists = playlists
+			} else {
+				alert("Ошибка HTTP: " + response.status)
+			}
 		},
 		setCurrentMonth(month) {
 			document.getElementById('current-month').innerText = this.monthList[month]
@@ -135,24 +150,6 @@ a:hover {
 }
 .current-month-wrapper:hover > i {
 	color: black;
-}
-.calendar-carousel {
-	overflow: hidden;
-}
-.calendar-day {
-	width: 40px;
-	height: 40px;
-	margin-right: 6px;
-	border-radius: 6px;
-	background: black;
-	line-height: 40px;
-	font-size: 20px;
-	color: white !important;
-	cursor: pointer;
-	transition: .1s;
-}
-.calendar-day:hover {
-	background: #0077ff;
 }
 .block {
 	position: relative;
